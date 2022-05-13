@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Statistics = ({ text, value }) => (
-  <p>
-    {text} {value}
-  </p>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 )
 
 const Button = ({ text, onClick }) => <button onClick={onClick}>{text}</button>
@@ -24,24 +25,28 @@ const App = () => {
       {good === 0 && bad === 0 && neutral === 0 ? (
         <h2>No feedback given</h2>
       ) : (
-        <>
-          <h2>Statistics</h2>
-          <Statistics text={'Good'} value={good} />
-          <Statistics text={'Neutral'} value={neutral} />
-          <Statistics text={'Bad'} value={bad} />
-          <Statistics text={'All'} value={good + neutral + bad} />
-          <Statistics
-            text={'Average'}
-            value={good * 1 + neutral * 0 + bad * -1}
-          />
-          <Statistics
-            text={'Positive % '}
-            value={(good * 100) / (good + neutral + bad) || 0}
-          />
-        </>
+        <table>
+          <thead>
+            <tr>
+              <th>Statistics</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Statistics text={'Good'} value={good} />
+            <Statistics text={'Neutral'} value={neutral} />
+            <Statistics text={'Bad'} value={bad} />
+            <Statistics text={'All'} value={good + neutral + bad} />
+            <Statistics
+              text={'Average'}
+              value={good * 1 + neutral * 0 + bad * -1}
+            />
+            <Statistics
+              text={'Positive'}
+              value={(good * 100) / (good + neutral + bad) + ' %'}
+            />
+          </tbody>
+        </table>
       )}
-
-      <Statistics good={good} neutral={neutral} bad={bad} />
     </>
   )
 }
