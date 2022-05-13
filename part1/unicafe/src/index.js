@@ -1,28 +1,13 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Statistics = ({ good, bad, neutral }) => {
-  if (good === 0 && bad === 0 && neutral === 0) {
-    return (
-      <>
-        <h2>Statistics</h2>
-        <div>No feedback given</div>
-      </>
-    )
-  }
+const Statistics = ({ text, value }) => (
+  <p>
+    {text} {value}
+  </p>
+)
 
-  return (
-    <>
-      <h2>Statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {good + neutral + bad}</p>
-      <p>average {good * 1 + neutral * 0 + bad * -1}</p>
-      <p>positive {(good * 100) / (good + neutral + bad) || 0} %</p>
-    </>
-  )
-}
+const Button = ({ text, onClick }) => <button onClick={onClick}>{text}</button>
 
 const App = () => {
   // save clicks of each button to its own state
@@ -33,9 +18,29 @@ const App = () => {
   return (
     <>
       <h1>Give feedback</h1>
-      <button onClick={() => setGood(good + 1)}>good</button>
-      <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
-      <button onClick={() => setBad(bad + 1)}>bad</button>
+      <Button text='good' onClick={() => setGood(good + 1)} />
+      <Button text='neutral' onClick={() => setNeutral(neutral + 1)} />
+      <Button text='bad' onClick={() => setBad(bad + 1)} />
+      {good === 0 && bad === 0 && neutral === 0 ? (
+        <h2>No feedback given</h2>
+      ) : (
+        <>
+          <h2>Statistics</h2>
+          <Statistics text={'Good'} value={good} />
+          <Statistics text={'Neutral'} value={neutral} />
+          <Statistics text={'Bad'} value={bad} />
+          <Statistics text={'All'} value={good + neutral + bad} />
+          <Statistics
+            text={'Average'}
+            value={good * 1 + neutral * 0 + bad * -1}
+          />
+          <Statistics
+            text={'Positive % '}
+            value={(good * 100) / (good + neutral + bad) || 0}
+          />
+        </>
+      )}
+
       <Statistics good={good} neutral={neutral} bad={bad} />
     </>
   )
