@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom'
 
 const generateRandomIndex = max => Math.floor(Math.random() * max)
 
+const getAnecdoteWithMoreVote = (anecdotes, votes) => {
+  const max = Math.max(...Object.values(votes))
+  const maxIndex = Object.keys(votes).find(key => votes[key] === max)
+  return <p>{anecdotes[maxIndex]}</p>
+}
+
 const App = props => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState({})
@@ -26,6 +32,8 @@ const App = props => {
       >
         Next anecdote
       </button>
+      <h2>Anecdote with more votes</h2>
+      {getAnecdoteWithMoreVote(anecdotes, votes)}
     </>
   )
 }
