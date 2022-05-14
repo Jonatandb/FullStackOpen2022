@@ -5,10 +5,22 @@ const generateRandomIndex = max => Math.floor(Math.random() * max)
 
 const App = props => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState({})
 
   return (
     <>
       <div>{props.anecdotes[selected]}</div>
+      <p>Has {votes[selected] || 0} votes </p>
+      <button
+        onClick={() =>
+          setVotes(prevState => ({
+            ...prevState,
+            [selected]: prevState[selected] + 1 || 1,
+          }))
+        }
+      >
+        Vote
+      </button>
       <button
         onClick={() => setSelected(generateRandomIndex(anecdotes.length))}
       >
