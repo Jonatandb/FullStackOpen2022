@@ -10,8 +10,12 @@ const App = () => {
 
   const handleSumbit = e => {
     e.preventDefault()
-    setPersons([...persons, { name: newName }])
-    setNewName('')
+    if (persons.find(p => p.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      setPersons([...persons, { name: newName }])
+      setNewName('')
+    }
   }
 
   return (
