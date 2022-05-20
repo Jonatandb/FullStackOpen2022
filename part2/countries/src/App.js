@@ -7,6 +7,7 @@ const App = () => {
   const [message, setMessage] = useState('')
   const [countryList, setCountryList] = useState([])
   const [country, setCountry] = useState({})
+  const [weather, setWeather] = useState({})
 
   useEffect(() => {
     axios.get(' https://restcountries.com/v3.1/all').then(response => {
@@ -33,6 +34,18 @@ const App = () => {
       }
     }
   }, [filter, allCountries])
+
+  useEffect(() => {
+    if (country.name) {
+      axios
+        .get(
+          `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_WEATHERSTACK_API_KEY}&query=${country.name.common}`,
+        )
+        .then(response => {
+          setWeather(response.data)
+        })
+    }
+  }, [country])
 
   const handleFilterChanged = e => {
     setFilter(e.target.value)
@@ -68,6 +81,23 @@ const App = () => {
             alt={`Flag of ${country.name.common}`}
             style={{ width: '100px' }}
           />
+          {!!Object.keys(weather).length && (
+            <>
+              <h3>Weather in {country.name.common}</h3>
+              <p>
+                <b>Temperature:</b> {weather?.current?.temperature} Celsius
+              </p>
+              <img
+                src={weather?.current?.weather_icons[0]}
+                alt={weather?.current?.weather_descriptions[0]}
+                style={{ width: '100px' }}
+              />
+              <p>
+                <b>Wind:</b> {weather?.current?.wind_speed} mph direction{' '}
+                {weather?.current?.wind_dirrection}
+              </p>
+            </>
+          )}
         </div>
       )}
     </div>
