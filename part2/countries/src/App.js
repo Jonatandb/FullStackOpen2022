@@ -43,9 +43,12 @@ const App = () => {
       Find countries: <input onChange={handleFilterChanged} value={filter} />
       {message && <p>{message}</p>}
       {!!countryList.length && (
-        <ul>
+        <ul style={{ listStyleType: 'none', paddingLeft: 0 }}>
           {countryList.map(c => (
-            <li key={c.name.common}>{c.name.common}</li>
+            <li key={c.name.common}>
+              {c.name.common}{' '}
+              <button onClick={() => setCountry(c)}>Show</button>
+            </li>
           ))}
         </ul>
       )}
