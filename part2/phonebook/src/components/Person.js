@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Person({ name, phone }) {
+export default function Person({ name, number }) {
   return (
     <p>
-      {name} {phone}
+      {name} {number}
     </p>
   )
 }
