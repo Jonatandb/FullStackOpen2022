@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import axios from 'axios'
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
@@ -15,7 +16,7 @@ const App = () => {
     })
   }, [])
 
-  const results =
+  const filteredResults =
     filter === ''
       ? persons
       : persons.filter(person =>
@@ -39,7 +40,13 @@ const App = () => {
     if (persons.find(p => p.name === newName)) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      setPersons([...persons, { name: newName, phone: newPhone }])
+      const newPerson = { name: newName, number: newPhone }
+
+      axios.post('http://localhost:3001/persons', newPerson).then(response => {
+        console.log(response)
+      })
+
+      setPersons([...persons, newPerson])
       setNewName('')
       setNewPhone('')
     }
@@ -59,7 +66,7 @@ const App = () => {
         newPhone={newPhone}
       />
       <h2>Numbers</h2>
-      <Persons persons={results} />
+      <Persons persons={filteredResults} />
     </div>
   )
 }
