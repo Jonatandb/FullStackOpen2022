@@ -50,6 +50,12 @@ const App = () => {
     }
   }
 
+  const handlePersonDeleted = id => {
+    personsService.remove(id).then(() => {
+      setPersons(persons.filter(person => person.id !== id))
+    })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -64,7 +70,10 @@ const App = () => {
         newPhone={newPhone}
       />
       <h2>Numbers</h2>
-      <Persons persons={filteredResults} />
+      <Persons
+        persons={filteredResults}
+        onPersonDeleted={handlePersonDeleted}
+      />
     </div>
   )
 }
