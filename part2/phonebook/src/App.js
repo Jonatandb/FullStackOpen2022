@@ -37,11 +37,23 @@ const App = () => {
 
   const handleSumbit = e => {
     e.preventDefault()
-    if (persons.find(p => p.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    const oldPerson = persons.find(p => p.name === newName)
+    if (oldPerson) {
+      const shouldUpdate = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`,
+      )
+      if (shouldUpdate) {
+        const updatedPerson = { ...oldPerson, number: newPhone }
+        personsService.update(updatedPerson).then(returnedPerson => {
+          setPersons(
+            persons.map(p => (p.id !== oldPerson.id ? p : returnedPerson)),
+          )
+          setNewName('')
+          setNewPhone('')
+        })
+      }
     } else {
       const newPerson = { name: newName, number: newPhone }
-
       personsService.create(newPerson).then(createdPerson => {
         setPersons([...persons, createdPerson])
         setNewName('')

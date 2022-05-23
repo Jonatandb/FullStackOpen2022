@@ -9,7 +9,12 @@ const personsService = {
   },
 
   create: newPerson => {
-    const request = axios.post('http://localhost:3001/persons', newPerson)
+    const request = axios.post(serverURL, newPerson)
+    return request.then(response => response.data)
+  },
+
+  update: person => {
+    const request = axios.put(serverURL + '/' + person.id, person)
     return request.then(response => response.data)
   },
 
