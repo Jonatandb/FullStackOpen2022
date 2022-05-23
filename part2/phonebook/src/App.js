@@ -3,12 +3,14 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personsService from './services/personsService'
+import Message from './components/Message'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     personsService.getAll().then(initialPersons => {
@@ -50,6 +52,10 @@ const App = () => {
           )
           setNewName('')
           setNewPhone('')
+          setMessage(`Updated ${updatedPerson.name}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
       }
     } else {
@@ -58,20 +64,30 @@ const App = () => {
         setPersons([...persons, createdPerson])
         setNewName('')
         setNewPhone('')
+        setMessage(`Added ${newPerson.name}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
     }
   }
 
   const handlePersonDeleted = id => {
-    if (window.confirm(`Delete ${persons.find(p => p.id === id).name}?`))
+    const personToDelete = persons.find(p => p.id === id)
+    if (window.confirm(`Delete ${personToDelete.name}?`))
       personsService.remove(id).then(() => {
         setPersons(persons.filter(person => person.id !== id))
+        setMessage(`Deleted ${personToDelete.name}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={message} />
       <Filter filter={filter} handleFilterChanged={handleFilterChanged} />
 
       <h3>Add a new</h3>
