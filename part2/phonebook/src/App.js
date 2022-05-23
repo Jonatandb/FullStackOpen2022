@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState({ type: '', text: '' })
 
   useEffect(() => {
     personsService.getAll().then(initialPersons => {
@@ -52,9 +52,9 @@ const App = () => {
           )
           setNewName('')
           setNewPhone('')
-          setMessage(`Updated ${updatedPerson.name}`)
+          setMessage({ type: 'success', text: `Updated ${updatedPerson.name}` })
           setTimeout(() => {
-            setMessage(null)
+            setMessage({ type: '', text: '' })
           }, 5000)
         })
       }
@@ -64,9 +64,9 @@ const App = () => {
         setPersons([...persons, createdPerson])
         setNewName('')
         setNewPhone('')
-        setMessage(`Added ${newPerson.name}`)
+        setMessage({ type: 'success', text: `Added ${newPerson.name}` })
         setTimeout(() => {
-          setMessage(null)
+          setMessage({ type: '', text: '' })
         }, 5000)
       })
     }
@@ -75,19 +75,34 @@ const App = () => {
   const handlePersonDeleted = id => {
     const personToDelete = persons.find(p => p.id === id)
     if (window.confirm(`Delete ${personToDelete.name}?`))
-      personsService.remove(id).then(() => {
-        setPersons(persons.filter(person => person.id !== id))
-        setMessage(`Deleted ${personToDelete.name}`)
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
-      })
+      personsService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+          setMessage({
+            type: 'success',
+            text: `Deleted ${personToDelete.name}`,
+          })
+          setTimeout(() => {
+            setMessage({ type: '', text: '' })
+          }, 5000)
+        })
+        .catch(error => {
+          setMessage({
+            type: 'error',
+            text: `Information of ${personToDelete.name} has already been removed from server`,
+          })
+          setPersons(persons.filter(person => person.id !== id))
+          setTimeout(() => {
+            setMessage({ type: '', text: '' })
+          }, 5000)
+        })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Message message={message} />
+      <Message message={message.text} type={message.type} />
       <Filter filter={filter} handleFilterChanged={handleFilterChanged} />
 
       <h3>Add a new</h3>

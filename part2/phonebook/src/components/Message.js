@@ -2,9 +2,10 @@ import React from 'react'
 
 import './Message.css'
 
-export default function Message({ message }) {
+export default function Message({ type, message }) {
   if (!message) {
     return null
   }
-  return <div className='message'>{message}</div>
+  const className = type === 'error' ? `Message-Error` : `Message-Success`
+  return <div className={className}>{message}</div>
 }
