@@ -10,3 +10,13 @@ GET {{baseUrl}}/2
 ###
 
 DELETE {{baseUrl}}/2
+
+###
+
+POST {{baseUrl}}
+content-type: application/json
+
+{
+  "name": "John Doe",
+  "number": "555-5555"
+}
