@@ -3,3 +3,10 @@
 
 GET {{baseUrl}}
 
+###
+
+GET {{baseUrl}}/2
+
+###
+
+DELETE {{baseUrl}}/2
