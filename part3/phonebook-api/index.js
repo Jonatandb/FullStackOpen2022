@@ -3,7 +3,14 @@ const app = express()
 const morgan = require('morgan')
 
 app.use(express.json())
-app.use(morgan('tiny'))
+
+// https://stackoverflow.com/questions/51409771/logging-post-body-size-using-morgan-when-request-is-received
+morgan.token('body', (req, res) =>
+  req.method === 'POST' ? JSON.stringify(req.body) : '',
+)
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms :body'),
+)
 
 let persons = [
   {
@@ -42,7 +49,7 @@ app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const person = persons.find(n => n.id === id)
   if (!person) {
-    response.status(404).end()
+    return response.status(404).end()
   }
   response.json(person)
 })
