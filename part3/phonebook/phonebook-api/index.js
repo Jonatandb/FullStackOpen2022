@@ -1,8 +1,11 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
+app.use(express.static('build'))
 app.use(express.json())
+app.use(cors())
 
 // https://stackoverflow.com/questions/51409771/logging-post-body-size-using-morgan-when-request-is-received
 morgan.token('body', (req, res) =>
@@ -83,7 +86,7 @@ app.post('/api/persons', (request, response) => {
   response.send(newPerson)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
